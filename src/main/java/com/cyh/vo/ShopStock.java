@@ -112,19 +112,36 @@ public class ShopStock implements CsvEntity {
 	}
 
 	@Override
-	public String[] getCsvLine() {
-		String[] results = new String[10];
-		results[0] = Utils.idWrap(id);
-		results[1] = Utils.stringWrap(name);
-		results[2] = Utils.numberWrap(stock);
-		results[3] = Utils.numberWrap(actualStock);
-		results[4] = Utils.numberWrap(buyAvgPrice);
-		results[5] = Utils.numberWrap(saleCount);
-		results[6] = Utils.numberWrap(saleAvgPrice);
-		results[7] = Utils.numberWrap(cost);
-		results[8] = Utils.numberWrap(profit);
-		results[9] = Utils.locaDateWrap(time);
-		return results;
+	public String getCsvLine() {
+		StringBuilder results = new StringBuilder();
+		results.append(Utils.idWrap(id)).append(",");
+		results.append(Utils.stringWrap(name)).append(",");
+		results.append(Utils.numberWrap(stock)).append(",");
+		results.append(Utils.numberWrap(actualStock)).append(",");
+		results.append(Utils.numberWrap(buyAvgPrice)).append(",");
+		results.append(Utils.numberWrap(saleCount)).append(",");
+		results.append(Utils.numberWrap(saleAvgPrice)).append(",");
+		results.append(Utils.numberWrap(cost)).append(",");
+		results.append(Utils.numberWrap(profit)).append(",");
+		results.append(Utils.locaDateWrap(time));
+		return results.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ShopStock other = (ShopStock) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 }

@@ -7,8 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
-
-    <title>首页</title>
+    <title>商品售价</title>
   </head>
   <body>
 
@@ -40,7 +39,43 @@
 		      </li>
 		    </ul>
 		  </div>
-		</nav>		
+		</nav>	
+		
+		<form class="form-inline">
+		  <div class="form-group mx-sm-3 mb-2">
+		    <label for="year" class="sr-only">商品售价年份</label>
+		    <input type="text" class="form-control" id="year" placeholder="商品售价年份">
+		  </div>
+		  <div class="form-group mx-sm-3 mb-2">
+		    <label for="month" class="sr-only">商品售价月份</label>
+		    <input type="text" class="form-control" id="month" placeholder="商品售价月份(1-12)">
+		  </div>
+		  <div class="form-group mx-sm-3 mb-2">
+		    <label for="month" class="sr-only">商品名称</label>
+		    <input type="text" class="form-control" id="name" placeholder="商品名称">
+		  </div>
+		  <a href="#" class="btn btn-primary mb-2" onclick='loadDatas()'>查询</a>
+		  &nbsp;
+		  <a href="#" class="btn btn-primary mb-2" onclick="dlg('')">添加商品</a>
+		  &nbsp;
+		  <a href="#" class="btn btn-primary mb-2" onclick='copy()'>复制上个月的商品</a>
+		</form>
+		
+		
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col"> 商品名称</th>
+		      <th scope="col">商品类型</th>
+		      <th scope="col">商品单位</th>
+		      <th scope="col">商品售价</th>
+		      <th scope="col">定价时间</th>
+		      <th scope="col">操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  </tbody>
+		</table>	
 	</div>
 
     <!-- Optional JavaScript -->
@@ -48,5 +83,7 @@
     <script src="js/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="js/popper.min.js" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/layer/layer.js" crossorigin="anonymous"></script>
+    <script src="js/price-config.js"></script>
   </body>
 </html>

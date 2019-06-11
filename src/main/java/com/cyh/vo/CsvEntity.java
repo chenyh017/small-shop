@@ -4,6 +4,6 @@ public interface CsvEntity {
 
 	public String getId();
 
-	public String[] getCsvLine();
+	public String getCsvLine();
 
 }

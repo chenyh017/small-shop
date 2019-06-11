@@ -66,15 +66,36 @@ public class ShopSalePrice implements CsvEntity {
 	}
 
 	@Override
-	public String[] getCsvLine() {
-		String[] results = new String[6];
-		results[0] = Utils.idWrap(id);
-		results[1] = Utils.stringWrap(name);
-		results[2] = Utils.stringWrap(type);
-		results[3] = Utils.stringWrap(unit);
-		results[4] = Utils.numberWrap(price);
-		results[5] = Utils.locaDateWrap(date);
-		return results;
+	public String getCsvLine() {
+		StringBuilder results = new StringBuilder();
+		results.append(Utils.idWrap(id)).append(",");
+		results.append(Utils.stringWrap(name)).append(",");
+		results.append(Utils.stringWrap(type)).append(",");
+		results.append(Utils.stringWrap(unit)).append(",");
+		results.append(Utils.numberWrap(price)).append(",");
+		results.append(Utils.locaDateWrap(date));
+		return results.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ShopSalePrice other = (ShopSalePrice) obj;
+		if (Utils.isEmpty(id) || Utils.isEmpty(other.id)) {
+			return false;
+		}
+		return id.equals(other.id);
 	}
 
 }

@@ -12,6 +12,7 @@ import com.cyh.vo.ShopStock;
 
 public class Utils {
 
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
 	private static final String PATH = "C:/small-shop/";
 
 	public static String getCsv(Class<?> clazz) {
@@ -47,7 +48,7 @@ public class Utils {
 	}
 
 	public static String idWrap(String id) {
-		if (id == null) {
+		if (id == null || "".equals(id)) {
 			return UUID.randomUUID().toString();
 		}
 		return id;
@@ -57,7 +58,26 @@ public class Utils {
 		if (obj == null) {
 			return "";
 		}
-		return obj.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		return obj.format(DateTimeFormatter.ofPattern(YYYY_MM_DD));
 	}
+
+	public static BigDecimal parseNumber(String value) {
+		if (value == null || "".equals(value)) {
+			return null;
+		}
+		return new BigDecimal(value);
+	}
+
+	public static LocalDate parseLocalDate(String value) {
+		if (value == null || "".equals(value)) {
+			return null;
+		}
+		return LocalDate.parse(value, DateTimeFormatter.ofPattern(YYYY_MM_DD));
+	}
+
+	public static boolean isEmpty(String str) {
+		return str == null || str.equals("");
+	}
+	
 
 }
