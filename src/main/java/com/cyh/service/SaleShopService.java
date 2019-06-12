@@ -11,17 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cyh.Utils;
-import com.cyh.vo.BuyShop;
-import com.cyh.vo.BuyShopAvg;
+import com.cyh.vo.SaleShop;
+import com.cyh.vo.SaleShopAvg;
 
 @Service
-public class BuyShopService extends CsvDao<BuyShop> {
+public class SaleShopService extends CsvDao<SaleShop> {
 
 	@Autowired
 	private ShopSalePriceService shopSalePriceService;
 
-	public List<BuyShop> queryByMonth(LocalDate date, String type) {
-		List<BuyShop> all = loadAll(new BuyShop()).getDatas();
+	@Override
+	protected SaleShop toEntity(String csvLine) {
+		String[] arr = csvLine.split(",");
+		SaleShop bean = new SaleShop();
+		bean.setId(arr[0]);
+		bean.setName(arr[1]);
+		bean.setPrice(Utils.parseNumber(arr[2]));
+		bean.setCount(Utils.parseNumber(arr[3]));
+		bean.setTime(Utils.parseLocalDate(arr[4]));
+		return bean;
+	}
+
+	public List<SaleShop> queryByMonth(LocalDate date, String type) {
+		List<SaleShop> all = loadAll(new SaleShop()).getDatas();
 		if (all.isEmpty()) {
 			return all;
 		}
@@ -35,8 +47,8 @@ public class BuyShopService extends CsvDao<BuyShop> {
 		}).sorted((bean1, bean2) -> bean2.getTime().compareTo(bean1.getTime())).collect(Collectors.toList());
 	}
 
-	public List<BuyShop> queryByDate(LocalDate date, String type) {
-		List<BuyShop> all = loadAll(new BuyShop()).getDatas();
+	public List<SaleShop> queryByDate(LocalDate date, String type) {
+		List<SaleShop> all = loadAll(new SaleShop()).getDatas();
 		if (all.isEmpty()) {
 			return all;
 		}
@@ -49,30 +61,18 @@ public class BuyShopService extends CsvDao<BuyShop> {
 		}).sorted((bean1, bean2) -> bean2.getTime().compareTo(bean1.getTime())).collect(Collectors.toList());
 	}
 
-	@Override
-	protected BuyShop toEntity(String csvLine) {
-		String[] arr = csvLine.split(",");
-		BuyShop bean = new BuyShop();
-		bean.setId(arr[0]);
-		bean.setName(arr[1]);
-		bean.setSumPrice(Utils.parseNumber(arr[2]));
-		bean.setCount(Utils.parseNumber(arr[3]));
-		bean.setTime(Utils.parseLocalDate(arr[4]));
-		return bean;
-	}
-
-	public List<BuyShopAvg> avg(LocalDate date, String type) {
-		List<BuyShop> all = queryByMonth(date, type);
-		List<BuyShopAvg> results = new ArrayList<>();
+	public List<SaleShopAvg> avg(LocalDate date, String type) {
+		List<SaleShop> all = queryByMonth(date, type);
+		List<SaleShopAvg> results = new ArrayList<>();
 		if (!all.isEmpty()) {
-			Map<String, List<BuyShop>> nameBuyShops = new HashMap<>();
+			Map<String, List<SaleShop>> nameBuyShops = new HashMap<>();
 			all.forEach(bean -> nameBuyShops.computeIfAbsent(bean.getName(), key -> new ArrayList<>()).add(bean));
 			nameBuyShops.forEach((key, value) -> {
-				BuyShopAvg buyShopAvg = new BuyShopAvg();
+				SaleShopAvg buyShopAvg = new SaleShopAvg();
 				value.forEach(shop -> {
 					buyShopAvg.setName(key);
 					buyShopAvg.addSumCount(shop.getCount());
-					buyShopAvg.addSumPrice(shop.getSumPrice());
+					buyShopAvg.addSumPrice(shop.getPrice().multiply(shop.getCount()));
 				});
 				buyShopAvg.calcAvg();
 				results.add(buyShopAvg);

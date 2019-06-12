@@ -24,7 +24,7 @@
 		        <a class="nav-link" href="/index.html">首页 <span class="sr-only">(current)</span></a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="/buy-shop.html">商品入库录入</a>
+		        <a class="nav-link" href="/buy-shop.html">商品进货录入</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="/sale-shop.html">商品出售录入</a>
@@ -53,6 +53,14 @@
 		  <div class="form-group mx-sm-3 mb-2">
 		    <label for="month" class="sr-only">商品名称</label>
 		    <input type="text" class="form-control" id="name" placeholder="商品名称">
+		  </div>
+		  <div class="form-group mx-sm-3 mb-2">
+		    <label for="type" class="sr-only">商品类型</label>
+		    <select id="type" class="form-control">
+		    	<option value="">全部</option>
+		    	<option value="小商品">小商品</option>
+		    	<option value="烟">烟</option>
+		    </select>
 		  </div>
 		  <a href="#" class="btn btn-primary mb-2" onclick='loadDatas()'>查询</a>
 		  &nbsp;

@@ -29,7 +29,7 @@ public class ShopSalePriceService extends CsvDao<ShopSalePrice> {
 	public List<ShopSalePrice> queryByDate(LocalDate date) {
 		CsvFile<ShopSalePrice> all = loadAll(new ShopSalePrice());
 		return all.getDatas().stream().filter(
-				bean -> date.getYear() == bean.getDate().getYear() && date.getMonth() == bean.getDate().getMonth())
+				bean -> date.getYear() == bean.getDate().getYear() && date.getMonthValue() == bean.getDate().getMonthValue())
 				.sorted((bean1, bean2) -> bean1.getName().compareTo(bean2.getName())).collect(Collectors.toList());
 	}
 
@@ -52,12 +52,38 @@ public class ShopSalePriceService extends CsvDao<ShopSalePrice> {
 
 	}
 
-	public List<ShopSalePrice> filterName(List<ShopSalePrice> queryByDate, String name) {
-		if (queryByDate.isEmpty() || Utils.isEmpty(name)) {
+	public List<ShopSalePrice> filter(List<ShopSalePrice> queryByDate, String name, String type) {
+		if (queryByDate.isEmpty()) {
 			return queryByDate;
 		}
-		return queryByDate.stream().filter((ShopSalePrice bean) -> bean.getName().contains(name))
-				.collect(Collectors.toList());
+		return queryByDate.stream().filter((ShopSalePrice bean) -> {
+			boolean flag = true;
+			if (!Utils.isEmpty(name)) {
+				flag = flag && bean.getName().contains(name);
+			}
+			if (!Utils.isEmpty(type)) {
+				flag = flag && type.equals(bean.getType());
+			}
+			return flag;
+		}).collect(Collectors.toList());
+	}
+
+	public String getTypeByName(String name) {
+		try {
+			if (Utils.isEmpty(name)) {
+				return "小商品";
+			}
+			List<ShopSalePrice> all = loadAll(new ShopSalePrice()).getDatas().stream()
+					.filter(b -> name.equals(b.getName())).collect(Collectors.toList());
+			if (all.isEmpty()) {
+				return "小商品";
+			}
+
+			return all.get(0).getType();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "小商品";
+		}
 	}
 
 }

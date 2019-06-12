@@ -18,9 +18,10 @@ public class ShopSalePriceController {
 	private ShopSalePriceService shopSalePriceService;
 
 	@PostMapping("/shopSalePrice/queryByDate")
-	public List<ShopSalePrice> queryByDate(int year, int month, @RequestParam(required = false) String name) {
-		LocalDate date = LocalDate.of(year, month, 01);
-		return shopSalePriceService.filterName(shopSalePriceService.queryByDate(date), name);
+	public List<ShopSalePrice> queryByDate(int year, int month, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String type) {
+		LocalDate date = LocalDate.of(year, month, 1);
+		return shopSalePriceService.filter(shopSalePriceService.queryByDate(date), name, type);
 	}
 
 	@PostMapping("/shopSalePrice/deleteById")
@@ -32,12 +33,21 @@ public class ShopSalePriceController {
 	public void copy() {
 		shopSalePriceService.copyLastMonthDatas();
 	}
-	
+
 	@PostMapping("/shopSalePrice/save")
-	public void save(ShopSalePrice bean,int year,int month) {
+	public void save(ShopSalePrice bean, int year, int month) {
 		LocalDate date = LocalDate.of(year, month, 1);
 		bean.setDate(date);
 		shopSalePriceService.saveOrUpdate(bean);
+	}
+
+	@PostMapping("/shopSalePrice/getPrice")
+	public double save(String name, int year, int month) {
+		List<ShopSalePrice> list = queryByDate(year, month, name, "");
+		if (list.isEmpty() || list.get(0).getPrice() == null) {
+			return -1;
+		}
+		return list.get(0).getPrice().doubleValue();
 	}
 
 }
